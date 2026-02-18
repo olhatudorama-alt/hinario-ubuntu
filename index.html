@@ -35,13 +35,13 @@ header{
 }
 
 header img{
-  width:52px;
-  height:52px;
+  width:72px;
+  height:72px;
 }
 
 h1{
   font-family:'Playfair Display',serif;
-  font-size:2.2rem;
+  font-size:2.3rem;
   flex:1;
 }
 
@@ -54,9 +54,21 @@ h1{
   margin-left:.5rem;
 }
 
+.search-bar{
+  padding:1rem 1.5rem;
+}
+
+.search-bar input{
+  width:100%;
+  padding:.8rem 1rem;
+  border-radius:10px;
+  border:none;
+  font-size:1rem;
+}
+
 .container{
   max-width:900px;
-  margin:2rem auto;
+  margin:1.5rem auto;
   padding:0 1rem;
 }
 
@@ -92,21 +104,23 @@ h1{
 .detail{
   background:var(--card-bg);
   max-width:900px;
-  margin:3rem auto;
+  margin:2rem auto;
   padding:2rem;
   border-radius:15px;
 }
 
-.close{
-  float:right;
-  font-size:1.5rem;
+.close, .back{
   cursor:pointer;
+  color:var(--primary-yellow);
+  font-weight:bold;
+  margin-bottom:1rem;
+  display:inline-block;
 }
 
 .lyrics{
   white-space:pre-wrap;
   line-height:1.8;
-  margin-top:1.5rem;
+  margin:1.5rem 0;
 }
 </style>
 </head>
@@ -121,48 +135,67 @@ h1{
   </div>
 </header>
 
+<div class="search-bar">
+  <input type="text" id="search" placeholder="Buscar hino por número ou título…">
+</div>
+
 <div class="container" id="list">Carregando hinos…</div>
 
 <div class="overlay" id="overlay">
   <div class="detail">
-    <div class="close" onclick="closeDetail()">✕</div>
+    <div class="back" onclick="closeDetail()">← Voltar ao índice</div>
     <h2><span id="dnum"></span> – <span id="dtitle"></span></h2>
     <div class="lyrics" id="dlyrics"></div>
+    <div class="back" onclick="closeDetail()">← Voltar ao índice</div>
   </div>
 </div>
 
 <script>
 const CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vRMmvd1DczfnoyH1TzT0eqjCoSw1dkYXMKKcpO5_NbfHJ-d3bDQjlLOJtBk_EwKsiXoq3gGqUC854KC/pub?gid=0&single=true&output=csv';
 
-let fontSize = 16;
+let hymns=[];
+let fontSize=16;
+
 function changeFont(delta){
-  fontSize = Math.min(26, Math.max(12, fontSize + delta/10));
-  document.documentElement.style.setProperty('--base-font', fontSize+'px');
+  fontSize=Math.min(26,Math.max(12,fontSize+delta/10));
+  document.documentElement.style.setProperty('--base-font',fontSize+'px');
 }
 
 function parseCSV(text){
   const rows=[];let row=[],field='',q=false;
-  for(let i=0;i<text.length;i++){const c=text[i],n=text[i+1];
+  for(let i=0;i<text.length;i++){
+    const c=text[i],n=text[i+1];
     if(c=='"'){q&&n=='"'?(field+='"',i++):q=!q}
     else if(c==','&&!q){row.push(field);field=''}
-    else if((c=='\n'||c=='\r')&&!q){if(field||row.length){row.push(field);rows.push(row)}
-      row=[];field='';if(c=='\r'&&n=='\n')i++}
-    else field+=c}
+    else if((c=='\n'||c=='\r')&&!q){
+      if(field||row.length){row.push(field);rows.push(row)}
+      row=[];field='';if(c=='\r'&&n=='\n')i++
+    } else field+=c;
+  }
   if(field||row.length){row.push(field);rows.push(row)}
   return rows.slice(1).map(r=>({num:r[0],title:r[1],lyrics:r[2]})).filter(h=>h.num&&h.title);
 }
 
-fetch(CSV_URL).then(r=>r.text()).then(t=>{
-  const data=parseCSV(t);
-  const list=document.getElementById('list');
-  list.innerHTML='';
-  data.forEach(h=>{
+function render(list){
+  const c=document.getElementById('list');
+  c.innerHTML='';
+  list.forEach(h=>{
     const d=document.createElement('div');
     d.className='card';
     d.innerHTML='<span class="num">'+h.num+'</span>'+h.title;
     d.onclick=()=>showDetail(h);
-    list.appendChild(d);
+    c.appendChild(d);
   });
+}
+
+fetch(CSV_URL).then(r=>r.text()).then(t=>{
+  hymns=parseCSV(t);
+  render(hymns);
+});
+
+document.getElementById('search').addEventListener('input',e=>{
+  const v=e.target.value.toLowerCase();
+  render(hymns.filter(h=>h.num.includes(v)||h.title.toLowerCase().includes(v)));
 });
 
 function showDetail(h){
@@ -172,7 +205,9 @@ function showDetail(h){
   overlay.classList.add('active');
 }
 
-function closeDetail(){overlay.classList.remove('active');}
+function closeDetail(){
+  overlay.classList.remove('active');
+}
 </script>
 
 </body>
