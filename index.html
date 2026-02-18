@@ -14,6 +14,7 @@
   --primary-yellow:#FFC72C;
   --card-bg:#2a2a2a;
   --text:#fff;
+  --base-font:16px;
 }
 
 *{box-sizing:border-box;margin:0;padding:0}
@@ -22,16 +23,35 @@ body{
   font-family:'Crimson Text',serif;
   background:linear-gradient(135deg,#0a0a0a,#1a1a1a);
   color:var(--text);
+  font-size:var(--base-font);
 }
 
 header{
-  padding:1.5rem;
+  display:flex;
+  align-items:center;
+  gap:1rem;
+  padding:1.2rem 1.5rem;
   border-bottom:3px solid var(--primary-yellow);
+}
+
+header img{
+  width:48px;
+  height:48px;
 }
 
 h1{
   font-family:'Playfair Display',serif;
   font-size:2.2rem;
+  flex:1;
+}
+
+.controls button{
+  background:none;
+  border:none;
+  color:var(--primary-yellow);
+  font-size:1.2rem;
+  cursor:pointer;
+  margin-left:.5rem;
 }
 
 .container{
@@ -88,16 +108,18 @@ h1{
   line-height:1.8;
   margin-top:1.5rem;
 }
-
-audio{
-  width:100%;
-  margin-top:1.5rem;
-}
 </style>
 </head>
 <body>
 
-<header><h1>Hinário Ubuntu</h1></header>
+<header>
+  <img src="logo.png" alt="Logo da Igreja">
+  <h1>Hinário Ubuntu</h1>
+  <div class="controls">
+    <button onclick="changeFont(-10)">A-</button>
+    <button onclick="changeFont(10)">A+</button>
+  </div>
+</header>
 
 <div class="container" id="list">Carregando hinos…</div>
 
@@ -106,19 +128,17 @@ audio{
     <div class="close" onclick="closeDetail()">✕</div>
     <h2><span id="dnum"></span> – <span id="dtitle"></span></h2>
     <div class="lyrics" id="dlyrics"></div>
-    <div id="daudio"></div>
   </div>
 </div>
 
 <script>
 const CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vRMmvd1DczfnoyH1TzT0eqjCoSw1dkYXMKKcpO5_NbfHJ-d3bDQjlLOJtBk_EwKsiXoq3gGqUC854KC/pub?gid=0&single=true&output=csv';
 
-function cleanAudio(url){
-  if(!url) return '';
-  return url
-    .replace(/^["'\s-]+/,'')
-    .replace(/["'\s]+$/,'')
-    .trim();
+let fontSize = 16;
+
+function changeFont(delta){
+  fontSize = Math.min(24, Math.max(12, fontSize + delta/10));
+  document.documentElement.style.setProperty('--base-font', fontSize+'px');
 }
 
 function parseCSV(text){
@@ -136,8 +156,7 @@ function parseCSV(text){
   return rows.slice(1).map(r=>({
     num:r[0],
     title:r[1],
-    lyrics:r[2],
-    audio:cleanAudio(r[3]||'')
+    lyrics:r[2]
   })).filter(h=>h.num&&h.title);
 }
 
@@ -158,15 +177,11 @@ function showDetail(h){
   dnum.textContent=h.num;
   dtitle.textContent=h.title;
   dlyrics.textContent=h.lyrics||'Letra não disponível';
-  daudio.innerHTML=h.audio
-    ? '<audio controls><source src="'+h.audio+'"></audio>'
-    : '<em>Áudio não disponível</em>';
   overlay.classList.add('active');
 }
 
 function closeDetail(){
   overlay.classList.remove('active');
-  daudio.innerHTML='';
 }
 </script>
 
