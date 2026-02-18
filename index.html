@@ -1,612 +1,71 @@
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hinário Ubuntu</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=Crimson+Text:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
-    <style>
-        :root {
-            --primary-yellow: #FFC72C;
-            --dark-bg: #1a1a1a;
-            --text-primary: #ffffff;
-            --text-secondary: #cccccc;
-            --card-bg: #2a2a2a;
-            --card-hover: #353535;
-            --accent-shadow: rgba(255, 199, 44, 0.2);
-            --base-font-size: 16px;
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Crimson Text', serif;
-            font-size: var(--base-font-size);
-            background: linear-gradient(135deg, #0a0a0a 0%, #1a1a1a 50%, #2a2020 100%);
-            color: var(--text-primary);
-            min-height: 100vh;
-            line-height: 1.6;
-        }
-
-        .header {
-            background: rgba(26, 26, 26, 0.95);
-            backdrop-filter: blur(10px);
-            border-bottom: 3px solid var(--primary-yellow);
-            position: sticky;
-            top: 0;
-            z-index: 1000;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-        }
-
-        .header-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 1.5rem;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 2rem;
-        }
-
-        .logo-section {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        .logo {
-            width: 60px;
-            height: 60px;
-            background: var(--primary-yellow);
-            border-radius: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 36px;
-            font-weight: 900;
-            color: #000;
-            font-family: 'Playfair Display', serif;
-            box-shadow: 0 4px 15px var(--accent-shadow);
-        }
-
-        .title-section h1 {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.2rem;
-            font-weight: 900;
-            letter-spacing: -0.02em;
-            background: linear-gradient(135deg, var(--primary-yellow) 0%, #ffdd77 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-
-        .subtitle {
-            font-size: 0.9rem;
-            color: var(--text-secondary);
-            font-style: italic;
-        }
-
-        .controls {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .font-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            cursor: pointer;
-            font-size: 1.1rem;
-            font-weight: bold;
-            transition: all 0.2s ease;
-            padding: 0.5rem;
-            font-family: 'Crimson Text', serif;
-        }
-
-        .font-btn:hover {
-            color: var(--primary-yellow);
-            transform: scale(1.1);
-        }
-
-        .search-container {
-            max-width: 1200px;
-            margin: 2rem auto;
-            padding: 0 1.5rem;
-        }
-
-        .search-input {
-            width: 100%;
-            padding: 1.2rem 1.5rem 1.2rem 3.5rem;
-            font-size: 1.1rem;
-            font-family: 'Crimson Text', serif;
-            background: var(--card-bg);
-            border: 2px solid rgba(255, 199, 44, 0.3);
-            border-radius: 15px;
-            color: var(--text-primary);
-            transition: all 0.3s ease;
-        }
-
-        .search-input:focus {
-            outline: none;
-            border-color: var(--primary-yellow);
-            box-shadow: 0 0 25px var(--accent-shadow);
-        }
-
-        .search-wrapper {
-            position: relative;
-        }
-
-        .search-icon {
-            position: absolute;
-            left: 1.2rem;
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--primary-yellow);
-            font-size: 1.3rem;
-        }
-
-        .hymns-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem 1.5rem 4rem;
-        }
-
-        .hymns-grid {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 1rem;
-            max-width: 700px;
-            margin: 0 auto;
-        }
-
-        .hymn-card {
-            background: var(--card-bg);
-            border-radius: 12px;
-            padding: 1rem 1.3rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border: 2px solid transparent;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        .hymn-card:hover {
-            transform: translateY(-2px);
-            border-color: var(--primary-yellow);
-            box-shadow: 0 6px 20px var(--accent-shadow);
-            background: var(--card-hover);
-        }
-
-        .hymn-number {
-            background: var(--primary-yellow);
-            color: var(--dark-bg);
-            padding: 0.4rem 0.7rem;
-            border-radius: 6px;
-            font-weight: 700;
-            font-size: 1rem;
-            min-width: 40px;
-            text-align: center;
-            flex-shrink: 0;
-        }
-
-        .hymn-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 1.2rem;
-            font-weight: 700;
-            color: var(--text-primary);
-            flex: 1;
-        }
-
-        .detail-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.92);
-            z-index: 2000;
-            overflow-y: auto;
-        }
-
-        .detail-overlay.active {
-            display: block;
-        }
-
-        .detail-content {
-            max-width: 900px;
-            margin: 2rem auto;
-            padding: 2.5rem;
-            background: var(--card-bg);
-            border-radius: 20px;
-            border: 2px solid var(--primary-yellow);
-            position: relative;
-        }
-
-        .close-btn {
-            position: absolute;
-            top: 1.5rem;
-            right: 1.5rem;
-            width: 45px;
-            height: 45px;
-            background: var(--primary-yellow);
-            color: var(--dark-bg);
-            border: none;
-            border-radius: 50%;
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-weight: bold;
-        }
-
-        .close-btn:hover {
-            transform: rotate(90deg) scale(1.1);
-        }
-
-        .detail-header {
-            margin-bottom: 2rem;
-            padding-bottom: 1.5rem;
-            border-bottom: 2px solid rgba(255, 199, 44, 0.2);
-        }
-
-        .detail-number {
-            display: inline-block;
-            background: var(--primary-yellow);
-            color: var(--dark-bg);
-            padding: 0.5rem 1rem;
-            border-radius: 8px;
-            font-weight: 700;
-            margin-bottom: 1rem;
-        }
-
-        .detail-title {
-            font-family: 'Playfair Display', serif;
-            font-size: 2.3rem;
-            font-weight: 900;
-            color: var(--text-primary);
-        }
-
-        .detail-lyrics {
-            font-size: 1.15rem;
-            line-height: 1.9;
-            color: var(--text-primary);
-            white-space: pre-wrap;
-            margin-bottom: 2rem;
-            padding: 1.5rem;
-            background: rgba(255, 255, 255, 0.03);
-            border-radius: 12px;
-            border-left: 4px solid var(--primary-yellow);
-        }
-
-        .audio-container {
-            margin-top: 2rem;
-            padding: 1.5rem;
-            background: rgba(0, 0, 0, 0.3);
-            border-radius: 12px;
-        }
-
-        .audio-container video {
-            width: 100%;
-            max-height: 60px;
-            background: #000;
-        }
-
-        .audio-container audio {
-            width: 100%;
-        }
-
-        .no-audio {
-            text-align: center;
-            padding: 2rem;
-            color: var(--text-secondary);
-            font-style: italic;
-        }
-
-        .loading {
-            text-align: center;
-            padding: 4rem;
-            font-size: 1.3rem;
-            color: var(--text-secondary);
-        }
-
-        .empty-state {
-            text-align: center;
-            padding: 4rem 2rem;
-            color: var(--text-secondary);
-        }
-
-        @media (max-width: 768px) {
-            .header-content {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .title-section h1 {
-                font-size: 1.8rem;
-            }
-
-            .detail-content {
-                margin: 1rem;
-                padding: 2rem 1.5rem;
-            }
-
-            .detail-title {
-                font-size: 2rem;
-            }
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hinário Ubuntu</title>
+<style>
+body { font-family: serif; background:#111; color:#fff; }
+.hymn { cursor:pointer; padding:10px; border-bottom:1px solid #333; }
+.overlay { display:none; position:fixed; inset:0; background:#000c; }
+.overlay.active { display:block; }
+.content { background:#222; margin:5%; padding:20px; }
+</style>
 </head>
 <body>
-    <header class="header">
-        <div class="header-content">
-            <div class="logo-section">
-                <div class="logo">U</div>
-                <div class="title-section">
-                    <h1>Hinário Ubuntu</h1>
-                    <p class="subtitle">Louvores e Adoração</p>
-                </div>
-            </div>
-            <div class="controls">
-                <button class="font-btn" id="decreaseFont" title="Diminuir fonte">A-</button>
-                <button class="font-btn" id="increaseFont" title="Aumentar fonte">A+</button>
-            </div>
-        </div>
-    </header>
 
-    <div class="search-container">
-        <div class="search-wrapper">
-            <span class="search-icon">🔍</span>
-            <input 
-                type="text" 
-                class="search-input" 
-                id="searchInput" 
-                placeholder="Buscar por número ou título do hino..."
-            >
-        </div>
-    </div>
+<h1>Hinário Ubuntu</h1>
+<div id="list">Carregando…</div>
 
-    <div class="hymns-container">
-        <div class="hymns-grid" id="hymnsGrid">
-            <div class="loading">Carregando hinos...</div>
-        </div>
-    </div>
+<div id="overlay" class="overlay">
+  <div class="content">
+    <button onclick="closeDetail()">Fechar</button>
+    <h2 id="title"></h2>
+    <pre id="lyrics"></pre>
+    <div id="audio"></div>
+  </div>
+</div>
 
-    <div class="detail-overlay" id="detailOverlay">
-        <div class="detail-content">
-            <button class="close-btn" id="closeDetail">×</button>
-            <div class="detail-header">
-                <div class="detail-number" id="detailNumber"></div>
-                <h2 class="detail-title" id="detailTitle"></h2>
-            </div>
-            <div class="detail-lyrics" id="detailLyrics"></div>
-            <div class="audio-container" id="audioContainer"></div>
-        </div>
-    </div>
+<script>
+const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRMmvd1DczfnoyH1TzT0eqjCoSw1dkYXMKKcpO5_NbfHJ-d3bDQjlLOJtBk_EwKsiXoq3gGqUC854KC/pub?gid=0&single=true&output=csv';
 
-    <script>
-        const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRMmvd1DczfnoyH1TzT0eqjCoSw1dkYXMKKcpO5_NbfHJ-d3bDQjlLOJtBk_EwKsiXoq3gGqUC854KC/pub?gid=0&single=true&output=csv';
-        
-        let hymnsData = [];
-        let currentFontSize = 100;
+function parseCSV(text){
+  const lines = text.split(/\r?\n/).slice(1);
+  return lines.map(l=>{
+    const p = l.split(',');
+    return { num:p[0], title:p[1], lyrics:p[2], audio:(p[3]||'').trim() };
+  }).filter(h=>h.num);
+}
 
-        // Font controls
-        document.getElementById('increaseFont').addEventListener('click', () => {
-            if (currentFontSize < 150) {
-                currentFontSize += 10;
-                updateFontSize();
-            }
-        });
+fetch(CSV_URL).then(r=>r.text()).then(t=>{
+  const data = parseCSV(t);
+  const list = document.getElementById('list');
+  list.innerHTML='';
+  data.forEach(h=>{
+    const d=document.createElement('div');
+    d.className='hymn';
+    d.textContent=h.num+' - '+h.title;
+    d.onclick=()=>showDetail(h);
+    list.appendChild(d);
+  });
+});
 
-        document.getElementById('decreaseFont').addEventListener('click', () => {
-            if (currentFontSize > 70) {
-                currentFontSize -= 10;
-                updateFontSize();
-            }
-        });
+function showDetail(h){
+  document.getElementById('title').textContent=h.title;
+  document.getElementById('lyrics').textContent=h.lyrics||'Letra não disponível';
+  const a=document.getElementById('audio');
+  if(h.audio){
+    a.innerHTML='<audio controls style="width:100%"><source src="'+h.audio+'"></audio>';
+  } else {
+    a.innerHTML='Áudio não disponível';
+  }
+  document.getElementById('overlay').classList.add('active');
+}
 
-        function updateFontSize() {
-            document.documentElement.style.setProperty('--base-font-size', `${currentFontSize / 100 * 16}px`);
-            localStorage.setItem('hymnFontSize', currentFontSize);
-        }
-
-        const savedFontSize = localStorage.getItem('hymnFontSize');
-        if (savedFontSize) {
-            currentFontSize = parseInt(savedFontSize);
-            updateFontSize();
-        }
-
-        // CSV Parser
-        function parseCSV(text) {
-            const rows = [];
-            let currentRow = [];
-            let currentField = '';
-            let inQuotes = false;
-            
-            for (let i = 0; i < text.length; i++) {
-                const char = text[i];
-                const nextChar = text[i + 1];
-                
-                if (char === '"') {
-                    if (inQuotes && nextChar === '"') {
-                        currentField += '"';
-                        i++;
-                    } else {
-                        inQuotes = !inQuotes;
-                    }
-                } else if (char === ',' && !inQuotes) {
-                    currentRow.push(currentField.trim());
-                    currentField = '';
-                } else if ((char === '\n' || char === '\r') && !inQuotes) {
-                    if (currentField || currentRow.length > 0) {
-                        currentRow.push(currentField.trim());
-                        if (currentRow.some(f => f)) {
-                            rows.push(currentRow);
-                        }
-                        currentRow = [];
-                        currentField = '';
-                    }
-                    if (char === '\r' && nextChar === '\n') {
-                        i++;
-                    }
-                } else {
-                    currentField += char;
-                }
-            }
-            
-            if (currentField || currentRow.length > 0) {
-                currentRow.push(currentField.trim());
-                if (currentRow.some(f => f)) {
-                    rows.push(currentRow);
-                }
-            }
-            
-            return rows.slice(1).map(row => ({
-                numero: row[0] || '',
-                titulo: row[1] || '',
-                letra: row[2] || '',
-                audio: row[3] || ''
-            })).filter(hymn => hymn.numero && hymn.titulo);
-        }
-
-        // Fetch hymns
-        async function fetchHymns() {
-            try {
-                const response = await fetch(CSV_URL);
-                const csvText = await response.text();
-                hymnsData = parseCSV(csvText);
-                
-                if (hymnsData.length > 0) {
-                    displayHymns(hymnsData);
-                } else {
-                    showEmptyState();
-                }
-            } catch (error) {
-                console.error('Erro:', error);
-                document.getElementById('hymnsGrid').innerHTML = `
-                    <div class="empty-state">
-                        <p>Erro ao carregar os hinos.</p>
-                    </div>
-                `;
-            }
-        }
-
-        function displayHymns(hymns) {
-            const grid = document.getElementById('hymnsGrid');
-            
-            if (hymns.length === 0) {
-                showEmptyState();
-                return;
-            }
-
-            grid.innerHTML = '';
-            hymns.forEach(hymn => {
-                const card = document.createElement('div');
-                card.className = 'hymn-card';
-                card.onclick = () => showDetail(hymn);
-                card.innerHTML = `
-                    <div class="hymn-number">${hymn.numero}</div>
-                    <div class="hymn-title">${hymn.titulo}</div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function showEmptyState() {
-            document.getElementById('hymnsGrid').innerHTML = `
-                <div class="empty-state">
-                    <p>Nenhum hino encontrado</p>
-                </div>
-            `;
-        }
-
-        function showDetail(hymn) {
-            document.getElementById('detailNumber').textContent = hymn.numero;
-            document.getElementById('detailTitle').textContent = hymn.titulo;
-            document.getElementById('detailLyrics').textContent = hymn.letra || 'Letra não disponível';
-            
-            const audioContainer = document.getElementById('audioContainer');
-            if (hymn.audio && hymn.audio.trim()) {
-                let audioUrl = hymn.audio.trim();
-                
-                // Use video element for better compatibility with GitHub Pages
-                audioContainer.innerHTML = `
-                    <video controls style="width: 100%; max-height: 60px; background: #000;">
-                        <source src="${audioUrl}" type="audio/mpeg">
-                        Seu navegador não suporta reprodução de áudio.
-                    </video>
-                `;
-                
-                const video = audioContainer.querySelector('video');
-                video.addEventListener('error', function(e) {
-                    console.error('Erro ao carregar áudio:', audioUrl, e);
-                    audioContainer.innerHTML = '<div class="no-audio">Erro ao carregar o áudio. Verifique o console para detalhes.</div>';
-                });
-            } else {
-                audioContainer.innerHTML = '<div class="no-audio">Áudio não disponível</div>';
-            }
-            
-            document.getElementById('detailOverlay').classList.add('active');
-            document.body.style.overflow = 'hidden';
-        }
-
-        function closeDetail() {
-            document.getElementById('detailOverlay').classList.remove('active');
-            document.body.style.overflow = 'auto';
-            
-            const audio = document.querySelector('#audioContainer audio');
-            const video = document.querySelector('#audioContainer video');
-            if (audio) {
-                audio.pause();
-                audio.currentTime = 0;
-            }
-            if (video) {
-                video.pause();
-                video.currentTime = 0;
-            }
-        }
-
-        // Search
-        document.getElementById('searchInput').addEventListener('input', (e) => {
-            const searchTerm = e.target.value.toLowerCase().trim();
-            
-            if (searchTerm === '') {
-                displayHymns(hymnsData);
-            } else {
-                const filtered = hymnsData.filter(hymn => 
-                    hymn.numero.toString().includes(searchTerm) ||
-                    hymn.titulo.toLowerCase().includes(searchTerm)
-                );
-                displayHymns(filtered);
-            }
-        });
-
-        document.getElementById('closeDetail').addEventListener('click', closeDetail);
-        document.getElementById('detailOverlay').addEventListener('click', (e) => {
-            if (e.target.id === 'detailOverlay') {
-                closeDetail();
-            }
-        });
-
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeDetail();
-            }
-        });
-
-        // Initialize
-        fetchHymns();
-        setInterval(fetchHymns, 5 * 60 * 1000);
-    </script>
+function closeDetail(){
+  document.getElementById('overlay').classList.remove('active');
+  document.getElementById('audio').innerHTML='';
+}
+</script>
 </body>
 </html>
