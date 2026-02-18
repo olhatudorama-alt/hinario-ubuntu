@@ -342,11 +342,13 @@
             border-radius: 15px;
             overflow: hidden;
             box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            padding: 1.5rem;
+            background: rgba(0, 0, 0, 0.3);
         }
 
-        .video-container video {
+        .video-container audio {
             width: 100%;
-            max-height: 500px;
+            height: 54px;
             background: #000;
         }
 
@@ -627,23 +629,40 @@
             
             const videoContainer = document.getElementById('videoContainer');
             if (hymn.audio && hymn.audio.trim()) {
-                // Convert Google Drive link to direct video link if needed
-                let videoUrl = hymn.audio;
-                if (videoUrl.includes('drive.google.com')) {
-                    const fileIdMatch = videoUrl.match(/[-\w]{25,}/);
-                    if (fileIdMatch) {
-                        videoUrl = `https://drive.google.com/uc?export=download&id=${fileIdMatch[0]}`;
+                // Convert Google Drive link to direct audio link
+                let audioUrl = hymn.audio;
+                
+                // Handle different Google Drive URL formats
+                if (audioUrl.includes('drive.google.com')) {
+                    // Extract file ID from various formats
+                    let fileId = null;
+                    
+                    // Format: /file/d/FILE_ID/view
+                    const viewMatch = audioUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+                    if (viewMatch) {
+                        fileId = viewMatch[1];
+                    }
+                    
+                    // Format: id=FILE_ID
+                    const idMatch = audioUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/);
+                    if (idMatch && !fileId) {
+                        fileId = idMatch[1];
+                    }
+                    
+                    if (fileId) {
+                        audioUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
                     }
                 }
                 
                 videoContainer.innerHTML = `
-                    <video controls>
-                        <source src="${videoUrl}" type="video/mp4">
-                        Seu navegador não suporta reprodução de vídeo.
-                    </video>
+                    <audio controls style="width: 100%;">
+                        <source src="${audioUrl}" type="audio/mpeg">
+                        <source src="${audioUrl}" type="audio/mp4">
+                        Seu navegador não suporta reprodução de áudio.
+                    </audio>
                 `;
             } else {
-                videoContainer.innerHTML = '<div class="no-video">Áudio/vídeo não disponível para este hino</div>';
+                videoContainer.innerHTML = '<div class="no-video">Áudio não disponível para este hino</div>';
             }
             
             document.getElementById('detailOverlay').classList.add('active');
@@ -654,10 +673,11 @@
             document.getElementById('detailOverlay').classList.remove('active');
             document.body.style.overflow = 'auto';
             
-            // Stop video if playing
-            const video = document.querySelector('#videoContainer video');
-            if (video) {
-                video.pause();
+            // Stop audio if playing
+            const audio = document.querySelector('#videoContainer audio');
+            if (audio) {
+                audio.pause();
+                audio.currentTime = 0;
             }
         }
 
@@ -669,33 +689,4 @@
                 displayHymns(hymnsData);
             } else {
                 const filtered = hymnsData.filter(hymn => 
-                    hymn.numero.toString().includes(searchTerm) ||
-                    hymn.titulo.toLowerCase().includes(searchTerm)
-                );
-                displayHymns(filtered);
-            }
-        });
-
-        // Close detail view
-        document.getElementById('closeDetail').addEventListener('click', closeDetail);
-        document.getElementById('detailOverlay').addEventListener('click', (e) => {
-            if (e.target.id === 'detailOverlay') {
-                closeDetail();
-            }
-        });
-
-        // Keyboard shortcuts
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'Escape') {
-                closeDetail();
-            }
-        });
-
-        // Initialize
-        fetchHymns();
-        
-        // Refresh data every 5 minutes
-        setInterval(fetchHymns, 5 * 60 * 1000);
-    </script>
-</body>
-</html>
+                    hymn.numero.toString().includes(searchTerm) |
