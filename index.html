@@ -11,90 +11,85 @@
 
 <style>
 :root {
-  --primary-yellow: #FFC72C;
-  --dark-bg: #1a1a1a;
-  --text-primary: #ffffff;
-  --text-secondary: #cccccc;
-  --card-bg: #2a2a2a;
+  --primary-yellow:#FFC72C;
+  --card-bg:#2a2a2a;
+  --text:#fff;
 }
 
-* { box-sizing: border-box; margin:0; padding:0; }
+*{box-sizing:border-box;margin:0;padding:0}
 
-body {
-  font-family: 'Crimson Text', serif;
-  background: linear-gradient(135deg,#0a0a0a,#1a1a1a);
-  color: var(--text-primary);
+body{
+  font-family:'Crimson Text',serif;
+  background:linear-gradient(135deg,#0a0a0a,#1a1a1a);
+  color:var(--text);
 }
 
-header {
+header{
   padding:1.5rem;
   border-bottom:3px solid var(--primary-yellow);
 }
 
-h1 {
-  font-family:'Playfair Display', serif;
+h1{
+  font-family:'Playfair Display',serif;
   font-size:2.2rem;
 }
 
-.container {
+.container{
   max-width:900px;
   margin:2rem auto;
   padding:0 1rem;
 }
 
-.hymn-card {
+.card{
   background:var(--card-bg);
   padding:1rem;
-  margin-bottom:1rem;
   border-radius:10px;
+  margin-bottom:1rem;
   cursor:pointer;
 }
 
-.hymn-card:hover {
-  outline:2px solid var(--primary-yellow);
-}
+.card:hover{outline:2px solid var(--primary-yellow)}
 
-.hymn-number {
+.num{
   background:var(--primary-yellow);
   color:#000;
-  display:inline-block;
-  padding:0.2rem 0.6rem;
+  padding:.2rem .6rem;
   border-radius:6px;
   font-weight:bold;
-  margin-right:0.5rem;
+  margin-right:.5rem;
 }
 
-.overlay {
+.overlay{
   display:none;
   position:fixed;
   inset:0;
-  background:rgba(0,0,0,0.9);
+  background:rgba(0,0,0,.9);
   overflow:auto;
 }
 
-.overlay.active { display:block; }
+.overlay.active{display:block}
 
-.detail {
+.detail{
   background:var(--card-bg);
+  max-width:900px;
   margin:3rem auto;
   padding:2rem;
   border-radius:15px;
-  max-width:900px;
 }
 
-.close {
+.close{
   float:right;
   font-size:1.5rem;
   cursor:pointer;
 }
 
-.lyrics {
+.lyrics{
   white-space:pre-wrap;
   line-height:1.8;
   margin-top:1.5rem;
 }
 
-audio {
+audio{
   width:100%;
   margin-top:1.5rem;
 }
@@ -102,9 +97,7 @@ audio {
 </head>
 <body>
 
-<header>
-  <h1>Hinário Ubuntu</h1>
-</header>
+<header><h1>Hinário Ubuntu</h1></header>
 
 <div class="container" id="list">Carregando hinos…</div>
 
@@ -118,72 +111,60 @@ audio {
 </div>
 
 <script>
-const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRMmvd1DczfnoyH1TzT0eqjCoSw1dkYXMKKcpO5_NbfHJ-d3bDQjlLOJtBk_EwKsiXoq3gGqUC854KC/pub?gid=0&single=true&output=csv';
+const CSV_URL='https://docs.google.com/spreadsheets/d/e/2PACX-1vRMmvd1DczfnoyH1TzT0eqjCoSw1dkYXMKKcpO5_NbfHJ-d3bDQjlLOJtBk_EwKsiXoq3gGqUC854KC/pub?gid=0&single=true&output=csv';
 
-function parseCSV(text) {
-  const rows = [];
-  let row = [];
-  let field = '';
-  let inQuotes = false;
+function cleanAudio(url){
+  if(!url) return '';
+  return url
+    .replace(/^["'\s-]+/,'')
+    .replace(/["'\s]+$/,'')
+    .trim();
+}
 
-  for (let i=0;i<text.length;i++) {
-    const c = text[i];
-    const n = text[i+1];
-
-    if (c === '"') {
-      if (inQuotes && n === '"') { field += '"'; i++; }
-      else { inQuotes = !inQuotes; }
-    }
-    else if (c === ',' && !inQuotes) {
-      row.push(field); field='';
-    }
-    else if ((c === '\n' || c === '\r') && !inQuotes) {
-      if (field || row.length) {
-        row.push(field);
-        rows.push(row);
-        row=[]; field='';
-      }
-      if (c==='\r' && n==='\n') i++;
-    }
-    else field += c;
+function parseCSV(text){
+  const rows=[];let row=[],field='',q=false;
+  for(let i=0;i<text.length;i++){
+    const c=text[i],n=text[i+1];
+    if(c=='"'){q&&n=='"'?(field+='"',i++):q=!q}
+    else if(c==','&&!q){row.push(field);field=''}
+    else if((c=='\n'||c=='\r')&&!q){
+      if(field||row.length){row.push(field);rows.push(row)}
+      row=[];field='';if(c=='\r'&&n=='\n')i++
+    } else field+=c;
   }
-
-  if (field || row.length) { row.push(field); rows.push(row); }
-
-  return rows.slice(1).map(r => ({
+  if(field||row.length){row.push(field);rows.push(row)}
+  return rows.slice(1).map(r=>({
     num:r[0],
     title:r[1],
     lyrics:r[2],
-    audio:(r[3]||'').trim()
-  })).filter(h=>h.num && h.title);
+    audio:cleanAudio(r[3]||'')
+  })).filter(h=>h.num&&h.title);
 }
 
-fetch(CSV_URL)
-.then(r=>r.text())
-.then(t=>{
-  const data = parseCSV(t);
-  const list = document.getElementById('list');
+fetch(CSV_URL).then(r=>r.text()).then(t=>{
+  const data=parseCSV(t);
+  const list=document.getElementById('list');
   list.innerHTML='';
   data.forEach(h=>{
     const d=document.createElement('div');
-    d.className='hymn-card';
-    d.innerHTML = '<span class="hymn-number">'+h.num+'</span>'+h.title;
+    d.className='card';
+    d.innerHTML='<span class="num">'+h.num+'</span>'+h.title;
     d.onclick=()=>showDetail(h);
     list.appendChild(d);
   });
 });
 
-function showDetail(h) {
+function showDetail(h){
   dnum.textContent=h.num;
   dtitle.textContent=h.title;
   dlyrics.textContent=h.lyrics||'Letra não disponível';
-  daudio.innerHTML = h.audio
+  daudio.innerHTML=h.audio
     ? '<audio controls><source src="'+h.audio+'"></audio>'
     : '<em>Áudio não disponível</em>';
   overlay.classList.add('active');
 }
 
-function closeDetail() {
+function closeDetail(){
   overlay.classList.remove('active');
   daudio.innerHTML='';
 }
