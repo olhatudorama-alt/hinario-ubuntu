@@ -66,19 +66,19 @@
             height: 60px;
             background: var(--primary-yellow);
             border-radius: 12px;
-            padding: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            font-weight: 900;
+            color: #000;
+            font-family: 'Playfair Display', serif;
             box-shadow: 0 4px 15px var(--accent-shadow);
             transition: transform 0.3s ease;
         }
 
         .logo:hover {
             transform: scale(1.05) rotate(2deg);
-        }
-
-        .logo img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
         }
 
         .title-section h1 {
@@ -180,12 +180,15 @@
         .hymn-card {
             background: var(--card-bg);
             border-radius: 15px;
-            padding: 1.5rem;
+            padding: 1.2rem 1.5rem;
             cursor: pointer;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
             border: 2px solid transparent;
             position: relative;
             overflow: hidden;
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
         }
 
         .hymn-card::before {
@@ -206,29 +209,33 @@
         }
 
         .hymn-card:hover {
-            transform: translateY(-5px);
+            transform: translateY(-3px);
             border-color: var(--primary-yellow);
-            box-shadow: 0 10px 30px var(--accent-shadow);
+            box-shadow: 0 8px 25px var(--accent-shadow);
             background: var(--card-hover);
         }
 
         .hymn-number {
-            display: inline-block;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             background: var(--primary-yellow);
             color: var(--dark-bg);
-            padding: 0.4rem 0.9rem;
+            padding: 0.5rem 0.8rem;
             border-radius: 8px;
             font-weight: 700;
-            font-size: 0.95rem;
-            margin-bottom: 0.8rem;
+            font-size: 1.1rem;
+            min-width: 45px;
+            flex-shrink: 0;
         }
 
         .hymn-title {
             font-family: 'Playfair Display', serif;
-            font-size: 1.4rem;
+            font-size: 1.3rem;
             font-weight: 700;
             color: var(--text-primary);
             line-height: 1.3;
+            flex: 1;
         }
 
         /* Detail View */
@@ -425,9 +432,7 @@
     <header class="header">
         <div class="header-content">
             <div class="logo-section">
-                <div class="logo">
-                    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==" alt="Ubuntu Logo" id="logoImg">
-                </div>
+                <div class="logo">U</div>
                 <div class="title-section">
                     <h1>Hinário Ubuntu</h1>
                     <p class="subtitle">Louvores e Adoração</p>
