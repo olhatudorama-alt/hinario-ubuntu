@@ -477,10 +477,9 @@
         let hymnsData = [];
         let currentFontSize = 100;
 
-        // Load logo image - you'll need to replace this with the actual base64 or upload the logo to your hosting
+        // Load logo image with actual Ubuntu logo
         const logoImg = document.getElementById('logoImg');
-        // Replace the src below with your logo file path when hosting
-        logoImg.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200"%3E%3Crect fill="%23FFC72C" width="200" height="200"/%3E%3Ctext x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" font-size="120" font-weight="bold" fill="%23000"%3EU%3C/text%3E%3C/svg%3E';
+        logoImg.src = 'data:image/jpeg;base64,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';
         logoImg.onerror = function() {
             // Fallback if logo doesn't load
             this.style.display = 'none';
@@ -606,12 +605,17 @@
                 return;
             }
 
-            grid.innerHTML = hymns.map(hymn => `
-                <div class="hymn-card" onclick="showDetail(${JSON.stringify(hymn).replace(/"/g, '&quot;')})">
+            grid.innerHTML = '';
+            hymns.forEach((hymn, index) => {
+                const card = document.createElement('div');
+                card.className = 'hymn-card';
+                card.onclick = () => showDetail(hymn);
+                card.innerHTML = `
                     <div class="hymn-number">${hymn.numero}</div>
                     <div class="hymn-title">${hymn.titulo}</div>
-                </div>
-            `).join('');
+                `;
+                grid.appendChild(card);
+            });
         }
 
         function showEmptyState() {
@@ -689,4 +693,33 @@
                 displayHymns(hymnsData);
             } else {
                 const filtered = hymnsData.filter(hymn => 
-                    hymn.numero.toString().includes(searchTerm) |
+                    hymn.numero.toString().includes(searchTerm) ||
+                    hymn.titulo.toLowerCase().includes(searchTerm)
+                );
+                displayHymns(filtered);
+            }
+        });
+
+        // Close detail view
+        document.getElementById('closeDetail').addEventListener('click', closeDetail);
+        document.getElementById('detailOverlay').addEventListener('click', (e) => {
+            if (e.target.id === 'detailOverlay') {
+                closeDetail();
+            }
+        });
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                closeDetail();
+            }
+        });
+
+        // Initialize
+        fetchHymns();
+        
+        // Refresh data every 5 minutes
+        setInterval(fetchHymns, 5 * 60 * 1000);
+    </script>
+</body>
+</html>
