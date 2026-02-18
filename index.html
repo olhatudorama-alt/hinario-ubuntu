@@ -515,25 +515,8 @@
                 const response = await fetch(CSV_URL);
                 const csvText = await response.text();
                 
-                // Better CSV parser that handles quoted fields with commas and newlines
-                hymnsData = [];
-                const lines = csvText.split('\n');
-                
-                // Skip header row
-                for (let i = 1; i < lines.length; i++) {
-                    if (!lines[i].trim()) continue;
-                    
-                    const values = parseCSVLine(lines[i]);
-                    
-                    if (values.length >= 2 && values[0] && values[1]) {
-                        hymnsData.push({
-                            numero: values[0].trim(),
-                            titulo: values[1].trim(),
-                            letra: values[2] ? values[2].trim() : '',
-                            audio: values[3] ? values[3].trim() : ''
-                        });
-                    }
-                }
+                // Parse CSV properly handling multiline quoted fields
+                hymnsData = parseCSV(csvText);
                 
                 if (hymnsData.length > 0) {
                     displayHymns(hymnsData);
@@ -551,33 +534,64 @@
             }
         }
         
-        // Proper CSV parser that handles quoted fields with commas
-        function parseCSVLine(line) {
-            const result = [];
-            let current = '';
+        // Robust CSV parser that handles multiline quoted fields
+        function parseCSV(text) {
+            const rows = [];
+            let currentRow = [];
+            let currentField = '';
             let inQuotes = false;
             
-            for (let i = 0; i < line.length; i++) {
-                const char = line[i];
-                const nextChar = line[i + 1];
+            for (let i = 0; i < text.length; i++) {
+                const char = text[i];
+                const nextChar = text[i + 1];
                 
                 if (char === '"') {
                     if (inQuotes && nextChar === '"') {
-                        current += '"';
+                        // Escaped quote
+                        currentField += '"';
                         i++;
                     } else {
+                        // Toggle quote state
                         inQuotes = !inQuotes;
                     }
                 } else if (char === ',' && !inQuotes) {
-                    result.push(current);
-                    current = '';
+                    // End of field
+                    currentRow.push(currentField.trim());
+                    currentField = '';
+                } else if ((char === '\n' || char === '\r') && !inQuotes) {
+                    // End of row
+                    if (currentField || currentRow.length > 0) {
+                        currentRow.push(currentField.trim());
+                        if (currentRow.some(f => f)) { // Only add non-empty rows
+                            rows.push(currentRow);
+                        }
+                        currentRow = [];
+                        currentField = '';
+                    }
+                    // Skip \r\n combinations
+                    if (char === '\r' && nextChar === '\n') {
+                        i++;
+                    }
                 } else {
-                    current += char;
+                    currentField += char;
                 }
             }
             
-            result.push(current);
-            return result;
+            // Add last field and row if any
+            if (currentField || currentRow.length > 0) {
+                currentRow.push(currentField.trim());
+                if (currentRow.some(f => f)) {
+                    rows.push(currentRow);
+                }
+            }
+            
+            // Convert to hymn objects (skip header row)
+            return rows.slice(1).map(row => ({
+                numero: row[0] || '',
+                titulo: row[1] || '',
+                letra: row[2] || '',
+                audio: row[3] || ''
+            })).filter(hymn => hymn.numero && hymn.titulo);
         }
 
         function displayHymns(hymns) {
