@@ -296,6 +296,12 @@
             border-radius: 12px;
         }
 
+        .audio-container video {
+            width: 100%;
+            max-height: 60px;
+            background: #000;
+        }
+
         .audio-container audio {
             width: 100%;
         }
@@ -533,18 +539,18 @@
             if (hymn.audio && hymn.audio.trim()) {
                 let audioUrl = hymn.audio.trim();
                 
+                // Use video element for better compatibility with GitHub Pages
                 audioContainer.innerHTML = `
-                    <audio controls controlsList="nodownload" preload="metadata">
+                    <video controls style="width: 100%; max-height: 60px; background: #000;">
                         <source src="${audioUrl}" type="audio/mpeg">
                         Seu navegador não suporta reprodução de áudio.
-                    </audio>
+                    </video>
                 `;
                 
-                // Add error handling
-                const audio = audioContainer.querySelector('audio');
-                audio.addEventListener('error', function(e) {
+                const video = audioContainer.querySelector('video');
+                video.addEventListener('error', function(e) {
                     console.error('Erro ao carregar áudio:', audioUrl, e);
-                    audioContainer.innerHTML = '<div class="no-audio">Erro ao carregar o áudio. Verifique se o arquivo existe.</div>';
+                    audioContainer.innerHTML = '<div class="no-audio">Erro ao carregar o áudio. Verifique o console para detalhes.</div>';
                 });
             } else {
                 audioContainer.innerHTML = '<div class="no-audio">Áudio não disponível</div>';
@@ -559,9 +565,14 @@
             document.body.style.overflow = 'auto';
             
             const audio = document.querySelector('#audioContainer audio');
+            const video = document.querySelector('#audioContainer video');
             if (audio) {
                 audio.pause();
                 audio.currentTime = 0;
+            }
+            if (video) {
+                video.pause();
+                video.currentTime = 0;
             }
         }
 
