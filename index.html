@@ -34,7 +34,6 @@
             line-height: 1.6;
         }
 
-        /* Header */
         .header {
             background: rgba(26, 26, 26, 0.95);
             backdrop-filter: blur(10px);
@@ -48,7 +47,7 @@
         .header-content {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 1.5rem 1.5rem;
+            padding: 1.5rem;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -74,11 +73,6 @@
             color: #000;
             font-family: 'Playfair Display', serif;
             box-shadow: 0 4px 15px var(--accent-shadow);
-            transition: transform 0.3s ease;
-        }
-
-        .logo:hover {
-            transform: scale(1.05) rotate(2deg);
         }
 
         .title-section h1 {
@@ -90,7 +84,6 @@
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
             background-clip: text;
-            margin-bottom: 0.2rem;
         }
 
         .subtitle {
@@ -99,7 +92,6 @@
             font-style: italic;
         }
 
-        /* Font Size Controls */
         .controls {
             display: flex;
             align-items: center;
@@ -114,7 +106,7 @@
             font-size: 1.1rem;
             font-weight: bold;
             transition: all 0.2s ease;
-            padding: 0.3rem;
+            padding: 0.5rem;
             font-family: 'Crimson Text', serif;
         }
 
@@ -123,21 +115,15 @@
             transform: scale(1.1);
         }
 
-        /* Search Bar */
         .search-container {
             max-width: 1200px;
             margin: 2rem auto;
             padding: 0 1.5rem;
         }
 
-        .search-wrapper {
-            position: relative;
-        }
-
         .search-input {
             width: 100%;
-            padding: 1.2rem 1.5rem;
-            padding-left: 3.5rem;
+            padding: 1.2rem 1.5rem 1.2rem 3.5rem;
             font-size: 1.1rem;
             font-family: 'Crimson Text', serif;
             background: var(--card-bg);
@@ -153,6 +139,10 @@
             box-shadow: 0 0 25px var(--accent-shadow);
         }
 
+        .search-wrapper {
+            position: relative;
+        }
+
         .search-icon {
             position: absolute;
             left: 1.2rem;
@@ -162,7 +152,6 @@
             font-size: 1.3rem;
         }
 
-        /* Hymns Grid */
         .hymns-container {
             max-width: 1200px;
             margin: 0 auto;
@@ -172,73 +161,50 @@
         .hymns-grid {
             display: grid;
             grid-template-columns: 1fr;
-            gap: 1.5rem;
-            max-width: 600px;
+            gap: 1rem;
+            max-width: 700px;
             margin: 0 auto;
         }
 
         .hymn-card {
             background: var(--card-bg);
-            border-radius: 15px;
-            padding: 1.2rem 1.5rem;
+            border-radius: 12px;
+            padding: 1rem 1.3rem;
             cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            transition: all 0.3s ease;
             border: 2px solid transparent;
-            position: relative;
-            overflow: hidden;
             display: flex;
             align-items: center;
-            gap: 1.2rem;
-        }
-
-        .hymn-card::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 4px;
-            background: linear-gradient(90deg, var(--primary-yellow), #ffdd77);
-            transform: scaleX(0);
-            transform-origin: left;
-            transition: transform 0.4s ease;
-        }
-
-        .hymn-card:hover::before {
-            transform: scaleX(1);
+            gap: 1rem;
         }
 
         .hymn-card:hover {
-            transform: translateY(-3px);
+            transform: translateY(-2px);
             border-color: var(--primary-yellow);
-            box-shadow: 0 8px 25px var(--accent-shadow);
+            box-shadow: 0 6px 20px var(--accent-shadow);
             background: var(--card-hover);
         }
 
         .hymn-number {
-            display: flex;
-            align-items: center;
-            justify-content: center;
             background: var(--primary-yellow);
             color: var(--dark-bg);
-            padding: 0.5rem 0.8rem;
-            border-radius: 8px;
+            padding: 0.4rem 0.7rem;
+            border-radius: 6px;
             font-weight: 700;
-            font-size: 1.1rem;
-            min-width: 45px;
+            font-size: 1rem;
+            min-width: 40px;
+            text-align: center;
             flex-shrink: 0;
         }
 
         .hymn-title {
             font-family: 'Playfair Display', serif;
-            font-size: 1.3rem;
+            font-size: 1.2rem;
             font-weight: 700;
             color: var(--text-primary);
-            line-height: 1.3;
             flex: 1;
         }
 
-        /* Detail View */
         .detail-overlay {
             display: none;
             position: fixed;
@@ -249,38 +215,20 @@
             background: rgba(0, 0, 0, 0.92);
             z-index: 2000;
             overflow-y: auto;
-            animation: fadeIn 0.3s ease;
         }
 
         .detail-overlay.active {
             display: block;
         }
 
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-
         .detail-content {
             max-width: 900px;
             margin: 2rem auto;
-            padding: 3rem;
+            padding: 2.5rem;
             background: var(--card-bg);
             border-radius: 20px;
             border: 2px solid var(--primary-yellow);
             position: relative;
-            animation: slideUp 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        @keyframes slideUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
         }
 
         .close-btn {
@@ -304,11 +252,10 @@
 
         .close-btn:hover {
             transform: rotate(90deg) scale(1.1);
-            box-shadow: 0 5px 20px var(--accent-shadow);
         }
 
         .detail-header {
-            margin-bottom: 2.5rem;
+            margin-bottom: 2rem;
             padding-bottom: 1.5rem;
             border-bottom: 2px solid rgba(255, 199, 44, 0.2);
         }
@@ -317,19 +264,17 @@
             display: inline-block;
             background: var(--primary-yellow);
             color: var(--dark-bg);
-            padding: 0.6rem 1.2rem;
-            border-radius: 10px;
+            padding: 0.5rem 1rem;
+            border-radius: 8px;
             font-weight: 700;
-            font-size: 1.1rem;
             margin-bottom: 1rem;
         }
 
         .detail-title {
             font-family: 'Playfair Display', serif;
-            font-size: 2.5rem;
+            font-size: 2.3rem;
             font-weight: 900;
             color: var(--text-primary);
-            line-height: 1.2;
         }
 
         .detail-lyrics {
@@ -344,29 +289,24 @@
             border-left: 4px solid var(--primary-yellow);
         }
 
-        .video-container {
+        .audio-container {
             margin-top: 2rem;
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
             padding: 1.5rem;
             background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
         }
 
-        .video-container audio {
+        .audio-container audio {
             width: 100%;
-            height: 54px;
-            background: #000;
         }
 
-        .no-video {
+        .no-audio {
             text-align: center;
             padding: 2rem;
             color: var(--text-secondary);
             font-style: italic;
         }
 
-        /* Loading State */
         .loading {
             text-align: center;
             padding: 4rem;
@@ -374,43 +314,20 @@
             color: var(--text-secondary);
         }
 
-        .loading::after {
-            content: '...';
-            animation: dots 1.5s infinite;
-        }
-
-        @keyframes dots {
-            0%, 20% { content: '.'; }
-            40% { content: '..'; }
-            60%, 100% { content: '...'; }
-        }
-
-        /* Empty State */
         .empty-state {
             text-align: center;
             padding: 4rem 2rem;
             color: var(--text-secondary);
         }
 
-        .empty-state p {
-            font-size: 1.2rem;
-            margin-top: 1rem;
-        }
-
-        /* Responsive */
         @media (max-width: 768px) {
             .header-content {
                 flex-direction: column;
-                gap: 1.5rem;
+                gap: 1rem;
             }
 
             .title-section h1 {
                 font-size: 1.8rem;
-            }
-
-            .controls {
-                width: 100%;
-                justify-content: center;
             }
 
             .detail-content {
@@ -420,10 +337,6 @@
 
             .detail-title {
                 font-size: 2rem;
-            }
-
-            .hymns-grid {
-                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -459,7 +372,7 @@
 
     <div class="hymns-container">
         <div class="hymns-grid" id="hymnsGrid">
-            <div class="loading">Carregando hinos</div>
+            <div class="loading">Carregando hinos...</div>
         </div>
     </div>
 
@@ -471,26 +384,17 @@
                 <h2 class="detail-title" id="detailTitle"></h2>
             </div>
             <div class="detail-lyrics" id="detailLyrics"></div>
-            <div class="video-container" id="videoContainer"></div>
+            <div class="audio-container" id="audioContainer"></div>
         </div>
     </div>
 
     <script>
-        // Configuration - Using your published CSV URL
         const CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRMmvd1DczfnoyH1TzT0eqjCoSw1dkYXMKKcpO5_NbfHJ-d3bDQjlLOJtBk_EwKsiXoq3gGqUC854KC/pub?gid=0&single=true&output=csv';
         
         let hymnsData = [];
         let currentFontSize = 100;
 
-        // Load logo image with actual Ubuntu logo
-        const logoImg = document.getElementById('logoImg');
-        logoImg.src = 'data:image/jpeg;base64,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';
-        logoImg.onerror = function() {
-            // Fallback if logo doesn't load
-            this.style.display = 'none';
-        };
-
-        // Font size controls
+        // Font controls
         document.getElementById('increaseFont').addEventListener('click', () => {
             if (currentFontSize < 150) {
                 currentFontSize += 10;
@@ -510,39 +414,13 @@
             localStorage.setItem('hymnFontSize', currentFontSize);
         }
 
-        // Load saved font size
         const savedFontSize = localStorage.getItem('hymnFontSize');
         if (savedFontSize) {
             currentFontSize = parseInt(savedFontSize);
             updateFontSize();
         }
 
-        // Fetch data from Google Sheets (using published CSV)
-        async function fetchHymns() {
-            try {
-                const response = await fetch(CSV_URL);
-                const csvText = await response.text();
-                
-                // Parse CSV properly handling multiline quoted fields
-                hymnsData = parseCSV(csvText);
-                
-                if (hymnsData.length > 0) {
-                    displayHymns(hymnsData);
-                } else {
-                    showEmptyState();
-                }
-            } catch (error) {
-                console.error('Erro ao carregar hinos:', error);
-                document.getElementById('hymnsGrid').innerHTML = `
-                    <div class="empty-state">
-                        <p>Erro ao carregar os hinos.</p>
-                        <p style="font-size: 0.9rem; margin-top: 1rem;">Verifique sua conexão com a internet.</p>
-                    </div>
-                `;
-            }
-        }
-        
-        // Robust CSV parser that handles multiline quoted fields
+        // CSV Parser
         function parseCSV(text) {
             const rows = [];
             let currentRow = [];
@@ -555,28 +433,23 @@
                 
                 if (char === '"') {
                     if (inQuotes && nextChar === '"') {
-                        // Escaped quote
                         currentField += '"';
                         i++;
                     } else {
-                        // Toggle quote state
                         inQuotes = !inQuotes;
                     }
                 } else if (char === ',' && !inQuotes) {
-                    // End of field
                     currentRow.push(currentField.trim());
                     currentField = '';
                 } else if ((char === '\n' || char === '\r') && !inQuotes) {
-                    // End of row
                     if (currentField || currentRow.length > 0) {
                         currentRow.push(currentField.trim());
-                        if (currentRow.some(f => f)) { // Only add non-empty rows
+                        if (currentRow.some(f => f)) {
                             rows.push(currentRow);
                         }
                         currentRow = [];
                         currentField = '';
                     }
-                    // Skip \r\n combinations
                     if (char === '\r' && nextChar === '\n') {
                         i++;
                     }
@@ -585,7 +458,6 @@
                 }
             }
             
-            // Add last field and row if any
             if (currentField || currentRow.length > 0) {
                 currentRow.push(currentField.trim());
                 if (currentRow.some(f => f)) {
@@ -593,13 +465,34 @@
                 }
             }
             
-            // Convert to hymn objects (skip header row)
             return rows.slice(1).map(row => ({
                 numero: row[0] || '',
                 titulo: row[1] || '',
                 letra: row[2] || '',
                 audio: row[3] || ''
             })).filter(hymn => hymn.numero && hymn.titulo);
+        }
+
+        // Fetch hymns
+        async function fetchHymns() {
+            try {
+                const response = await fetch(CSV_URL);
+                const csvText = await response.text();
+                hymnsData = parseCSV(csvText);
+                
+                if (hymnsData.length > 0) {
+                    displayHymns(hymnsData);
+                } else {
+                    showEmptyState();
+                }
+            } catch (error) {
+                console.error('Erro:', error);
+                document.getElementById('hymnsGrid').innerHTML = `
+                    <div class="empty-state">
+                        <p>Erro ao carregar os hinos.</p>
+                    </div>
+                `;
+            }
         }
 
         function displayHymns(hymns) {
@@ -611,7 +504,7 @@
             }
 
             grid.innerHTML = '';
-            hymns.forEach((hymn, index) => {
+            hymns.forEach(hymn => {
                 const card = document.createElement('div');
                 card.className = 'hymn-card';
                 card.onclick = () => showDetail(hymn);
@@ -636,42 +529,28 @@
             document.getElementById('detailTitle').textContent = hymn.titulo;
             document.getElementById('detailLyrics').textContent = hymn.letra || 'Letra não disponível';
             
-            const videoContainer = document.getElementById('videoContainer');
+            const audioContainer = document.getElementById('audioContainer');
             if (hymn.audio && hymn.audio.trim()) {
-                // Convert Google Drive link to direct audio link
                 let audioUrl = hymn.audio;
                 
-                // Handle different Google Drive URL formats
+                // Try to convert Google Drive links
                 if (audioUrl.includes('drive.google.com')) {
-                    // Extract file ID from various formats
-                    let fileId = null;
-                    
-                    // Format: /file/d/FILE_ID/view
-                    const viewMatch = audioUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-                    if (viewMatch) {
-                        fileId = viewMatch[1];
-                    }
-                    
-                    // Format: id=FILE_ID
-                    const idMatch = audioUrl.match(/[?&]id=([a-zA-Z0-9_-]+)/);
-                    if (idMatch && !fileId) {
-                        fileId = idMatch[1];
-                    }
-                    
-                    if (fileId) {
-                        audioUrl = `https://drive.google.com/uc?export=download&id=${fileId}`;
+                    const fileIdMatch = audioUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
+                    if (fileIdMatch) {
+                        audioUrl = `https://drive.google.com/uc?export=download&id=${fileIdMatch[1]}`;
                     }
                 }
                 
-                videoContainer.innerHTML = `
-                    <audio controls style="width: 100%;">
+                audioContainer.innerHTML = `
+                    <audio controls controlsList="nodownload">
                         <source src="${audioUrl}" type="audio/mpeg">
-                        <source src="${audioUrl}" type="audio/mp4">
+                        <source src="${audioUrl}" type="audio/mp3">
+                        <source src="${audioUrl}" type="audio/wav">
                         Seu navegador não suporta reprodução de áudio.
                     </audio>
                 `;
             } else {
-                videoContainer.innerHTML = '<div class="no-video">Áudio não disponível para este hino</div>';
+                audioContainer.innerHTML = '<div class="no-audio">Áudio não disponível</div>';
             }
             
             document.getElementById('detailOverlay').classList.add('active');
@@ -682,15 +561,14 @@
             document.getElementById('detailOverlay').classList.remove('active');
             document.body.style.overflow = 'auto';
             
-            // Stop audio if playing
-            const audio = document.querySelector('#videoContainer audio');
+            const audio = document.querySelector('#audioContainer audio');
             if (audio) {
                 audio.pause();
                 audio.currentTime = 0;
             }
         }
 
-        // Search functionality
+        // Search
         document.getElementById('searchInput').addEventListener('input', (e) => {
             const searchTerm = e.target.value.toLowerCase().trim();
             
@@ -705,7 +583,6 @@
             }
         });
 
-        // Close detail view
         document.getElementById('closeDetail').addEventListener('click', closeDetail);
         document.getElementById('detailOverlay').addEventListener('click', (e) => {
             if (e.target.id === 'detailOverlay') {
@@ -713,7 +590,6 @@
             }
         });
 
-        // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
             if (e.key === 'Escape') {
                 closeDetail();
@@ -722,8 +598,6 @@
 
         // Initialize
         fetchHymns();
-        
-        // Refresh data every 5 minutes
         setInterval(fetchHymns, 5 * 60 * 1000);
     </script>
 </body>
