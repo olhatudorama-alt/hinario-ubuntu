@@ -531,24 +531,21 @@
             
             const audioContainer = document.getElementById('audioContainer');
             if (hymn.audio && hymn.audio.trim()) {
-                let audioUrl = hymn.audio;
-                
-                // Try to convert Google Drive links
-                if (audioUrl.includes('drive.google.com')) {
-                    const fileIdMatch = audioUrl.match(/\/file\/d\/([a-zA-Z0-9_-]+)/);
-                    if (fileIdMatch) {
-                        audioUrl = `https://drive.google.com/uc?export=download&id=${fileIdMatch[1]}`;
-                    }
-                }
+                let audioUrl = hymn.audio.trim();
                 
                 audioContainer.innerHTML = `
-                    <audio controls controlsList="nodownload">
+                    <audio controls controlsList="nodownload" preload="metadata">
                         <source src="${audioUrl}" type="audio/mpeg">
-                        <source src="${audioUrl}" type="audio/mp3">
-                        <source src="${audioUrl}" type="audio/wav">
                         Seu navegador não suporta reprodução de áudio.
                     </audio>
                 `;
+                
+                // Add error handling
+                const audio = audioContainer.querySelector('audio');
+                audio.addEventListener('error', function(e) {
+                    console.error('Erro ao carregar áudio:', audioUrl, e);
+                    audioContainer.innerHTML = '<div class="no-audio">Erro ao carregar o áudio. Verifique se o arquivo existe.</div>';
+                });
             } else {
                 audioContainer.innerHTML = '<div class="no-audio">Áudio não disponível</div>';
             }
