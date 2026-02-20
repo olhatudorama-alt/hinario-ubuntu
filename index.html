@@ -39,19 +39,26 @@ header{
 }
 .header-wrapper{
   display:flex;
+  flex-direction:column;
   align-items:center;
-  gap:1rem;
+  gap:.6rem;
 }
-header img{width:72px;height:72px}
+.header-top{
+  display:flex;
+  align-items:center;
+  gap:.8rem;
+}
+header img{width:52px;height:52px;flex-shrink:0}
 h1{
   font-family:'Nunito',sans-serif;
-  font-size:2.3rem;
+  font-size:1.7rem;
   font-weight:700;
+  white-space:nowrap;
 }
 .controls{
-  margin-left:auto;
   display:flex;
   gap:1rem;
+  justify-content:center;
 }
 .controls button{
   background:none;
@@ -157,27 +164,6 @@ audio{width:100%;margin-top:1rem}
   text-decoration:none;
 }
 
-/* RESPONSIVO */
-@media(max-width:600px){
-  .header-wrapper{flex-direction:column;align-items:flex-start}
-  .controls{margin-left:0}
-}
-
-.header-wrapper{
-  display:flex;
-  align-items:center;
-  gap:1rem;
-  flex-wrap:nowrap;
-}
-header img{
-  flex-shrink:0;
-}
-h1{
-  white-space:nowrap;
-}
-@media(max-width:600px){
-  h1{font-size:1.8rem}
-}
 
 </style>
 </head>
@@ -186,8 +172,10 @@ h1{
 
 <header>
   <div class="header-wrapper">
-    <img src="https://i.imgur.com/4aZvsOD.png">
-    <h1>Hinário Ubuntu</h1>
+    <div class="header-top">
+      <img src="https://i.imgur.com/4aZvsOD.png">
+      <h1>Hinário Ubuntu</h1>
+    </div>
     <div class="controls">
       <button onclick="toggleTheme()">🌙</button>
       <button onclick="font(-1)">A-</button>
