@@ -195,6 +195,28 @@ audio{width:100%;margin-top:1rem}
   <div id="list">Carregando hinos…</div>
 </div>
 
+<div class="overlay" id="playlistOverlay">
+  <div class="detail">
+    <div class="detail-header">
+      <span class="back" onclick="closePlaylist()">← Voltar ao índice</span>
+      <div class="detail-controls">
+        <button onclick="font(-1)">A-</button>
+        <button onclick="font(1)">A+</button>
+      </div>
+    </div>
+    <h2>▶ Playlist</h2>
+    <div style="margin:1rem 0;display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem;max-width:360px">
+      <button onclick="plPrev()" style="background:var(--card);border:2px solid var(--primary);color:var(--accent);padding:.5rem;border-radius:8px;font-size:1.2rem;cursor:pointer">⏮</button>
+      <button onclick="plPlay()" id="plPlayBtn" style="background:var(--primary);border:none;color:#000;padding:.5rem;border-radius:8px;font-size:1.2rem;font-weight:bold;cursor:pointer">▶</button>
+      <button onclick="plStop()" style="background:var(--card);border:2px solid var(--primary);color:var(--accent);padding:.5rem;border-radius:8px;font-size:1.2rem;cursor:pointer">⏹</button>
+      <button onclick="plNext()" style="background:var(--card);border:2px solid var(--primary);color:var(--accent);padding:.5rem;border-radius:8px;font-size:1.2rem;cursor:pointer">⏭</button>
+    </div>
+    <div id="plNowPlaying" style="margin-bottom:1.2rem;font-weight:bold;font-size:1.1rem;line-height:1.5"></div>
+    <audio id="plPlayer" controls style="width:100%;margin-bottom:.5rem"></audio>
+    <span class="back" style="display:block;margin-top:1.5rem;color:var(--accent);font-weight:bold;cursor:pointer" onclick="closePlaylist()">← Voltar ao índice</span>
+  </div>
+</div>
+
 <div class="overlay" id="overlay">
   <div class="detail">
     <div class="detail-header">
@@ -273,6 +295,68 @@ fetch(CSV_URL).then(r=>r.text()).then(t=>{
   hymns=parseCSV(t);
   render(hymns);
 });
+// PLAYLIST
+let plIndex=0,plAudio=document.getElementById('plPlayer');
+
+function openPlaylist(){
+  const withAudio=hymns.filter(h=>h.audio);
+  plIndex=0;
+  plLoadTrack(withAudio);
+  document.getElementById('playlistOverlay').classList.add('active');
+  plAudio.onended=()=>{plNext();};
+  plAudio._withAudio=withAudio;
+}
+
+function plLoadTrack(list){
+  const h=list[plIndex];
+  plAudio.src=h.audio;
+  document.getElementById('plNowPlaying').innerHTML='♪ Tocando agora:<br>'+h.num+' – '+h.title;
+}
+
+function plLoadAndPlay(list){
+  plLoadTrack(list);
+  plAudio.play();
+  document.getElementById('plPlayBtn').textContent='⏸';
+}
+
+function plPlay(){
+  const list=plAudio._withAudio;
+  if(!list) return;
+  if(plAudio.paused){
+    plAudio.play();
+    document.getElementById('plPlayBtn').textContent='▶';
+  } else {
+    plAudio.pause();
+    document.getElementById('plPlayBtn').textContent='⏸';
+  }
+}
+
+function plStop(){
+  plAudio.pause();
+  plAudio.currentTime=0;
+  document.getElementById('plPlayBtn').textContent='▶';
+}
+
+function plNext(){
+  const list=plAudio._withAudio;
+  if(!list) return;
+  plIndex=(plIndex+1)%list.length;
+  plLoadAndPlay(list);
+}
+
+function plPrev(){
+  const list=plAudio._withAudio;
+  if(!list) return;
+  plIndex=(plIndex-1+list.length)%list.length;
+  plLoadAndPlay(list);
+}
+
+function closePlaylist(){
+  plAudio.pause();plAudio.src='';
+  document.getElementById('plPlayBtn').textContent='▶ Play';
+  document.getElementById('playlistOverlay').classList.remove('active');
+}
+
 search.oninput=e=>{
   const v=e.target.value.toLowerCase();
   render(hymns.filter(h=>h.num.includes(v)||h.title.toLowerCase().includes(v)));
